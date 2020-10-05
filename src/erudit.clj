@@ -19,7 +19,8 @@
    {:pre  [(string? word)]
     :post [(coll? %)]}
    (let [len (.length word)]
-     (if (every? pos? [n len])
+     (if (and (pos? n)
+              (pos? len))
        (cons word
              (concat (enum-stems (subs word 1)           (dec n))
                      (enum-stems (subs word 0 (dec len)) (dec n))))
