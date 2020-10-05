@@ -13,10 +13,10 @@
   (multi-subset? (frequencies word) letter-pool))
 
 (defn enum-stems
-  ([word]
+  ([^String word]
    (set (enum-stems word 7)))
-  ([word n]
-   {:pre  [(string? word)]
+  ([^String word n]
+   #_{:pre  [(string? word)]
     :post [(coll? %)]}
    (let [len (.length word)]
      (if (and (pos? n)
@@ -24,7 +24,7 @@
        (cons word
              (concat (enum-stems (subs word 1)           (dec n))
                      (enum-stems (subs word 0 (dec len)) (dec n))))
-       [word]))))
+       (list word)))))
 
 (defn find-precursors [dictionary word]
   {:pre [(set? dictionary)
@@ -44,7 +44,7 @@
 
 (defn full-solution? [solution]
   {:pre [(map? solution)]}
-  (some (fn [[k v]]
+  (some (fn [[^String k v]]
           (or (-> k .length (<= 7))
               (full-solution? v)))
         solution))
