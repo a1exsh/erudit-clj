@@ -49,10 +49,19 @@
               (full-solution? v)))
         solution))
 
+(defn fits-on-board? [word]
+  (-> word .length (<= 15)))
+
+(defn longest-first-comp [^String a ^String b]
+  (let [r (compare (.length b) (.length a))]
+    (if (not= r 0)
+      r
+      (compare a b))))
+
 (defn find-longest-solutions [letter-pool dictionary]
   (->> dictionary
-       (sort-by #(.length %))
-       reverse
+       (filter fits-on-board?)
+       (sort longest-first-comp)
        (filter #(enough-letters-for-word? letter-pool %))
        (map (fn [word]
               [word (find-word-chains dictionary word)]))
@@ -63,6 +72,8 @@
   (println "Hello, Erudit!"))
 
 (comment
+  (sort longest-first-comp ["abc" "ab" "def" "cd"])
+
   (def ru-pool (frequencies "истукановедение"))
   (def ru-dict
     #{"тук" "стук" "тукан" "истукан" "истукановед" "истукановедение"})
